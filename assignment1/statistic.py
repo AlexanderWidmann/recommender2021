@@ -1,6 +1,5 @@
 import csv
 
-
 def computeMeanRating(filename):
     ratings = []
 
@@ -17,12 +16,9 @@ def computeMeanRating(filename):
                 ratings.append(float((columns[2])))
 
         f.close()
-        sum = 0
         n = len(ratings)
-        for i in ratings:
-            sum += i
         ## calculating arithmetic mean
-        average = sum / (len(ratings))
+        average = sum(ratings) / (len(ratings))
         # round arithmetic to 5 digits
         average = round(average, 5)
 

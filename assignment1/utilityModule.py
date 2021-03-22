@@ -1,5 +1,4 @@
 class Statistics:
-
     def computeMeanRating(filename):
         ratings = []
 
