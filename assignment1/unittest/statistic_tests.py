@@ -2,6 +2,9 @@ import unittest
 
 from assignment1 import statistic as stat
 
+"""
+The numbers for the test were calculated with Excel
+"""
 
 class MyTestCase(unittest.TestCase):
 
@@ -18,8 +21,6 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(median, 3.5)
         #mode
         self.assertEqual(mode, 4)
-
-
 
 
 

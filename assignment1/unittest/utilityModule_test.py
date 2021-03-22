@@ -1,6 +1,9 @@
 import unittest
 from assignment1 import utilityModule as stat
 
+"""
+The numbers for the test were calculated with Excel
+"""
 
 class MyTestCase(unittest.TestCase):
     def testModule(self):

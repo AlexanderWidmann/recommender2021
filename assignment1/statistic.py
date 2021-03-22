@@ -34,21 +34,28 @@ def computeMeanRating(filename):
         return average, median, mode
 
 def calcMode(ratings):
+        #Creating an Map where the amount of each number will be stored
         numCount = {}
         highestNum = 0
+
+        #Fill the Map with the numbers which appear in the List
         for i in ratings:
+            #if the number already appears in the list count up
             if i in numCount.keys():
                 numCount[i] += 1
             else:
                 numCount[i] = 1
+
+        #check which number appears most often
         for i in numCount.keys():
             if numCount[i] > highestNum:
                 highestNum = numCount[i]
                 mode = i
         if highestNum != 1:
             return mode
+        #case if every number only appears once
         elif highestNum == 1:
-            print("All elements of list appear once.")
+            print("All numbers in the list appear once.")
             return -1
 
 def calcMedian(ratings, n):
