@@ -15,23 +15,18 @@ class Statistics:
                     ratings.append(float((columns[2])))
 
             f.close()
-            sum = 0
-            n = len(ratings)
-            for i in ratings:
-                sum += i
-            ## calculating arithmetic mean
-            average = sum / (len(ratings))
-            # round arithmetic to 5 digits
-            average = round(average, 5)
 
+            n = len(ratings)
             # sorting for median
             ratings.sort()
-            # calculating the median
-            if n % 2 != 0:
-                median = ratings[int(n / 2)]
-            else:
-                # case when the len of the data is even.
-                median = float((ratings[int((n - 1) / 2)] + ratings[int(n / 2)]) / 2.0)
+
+            # calculating Arithmetic Mean
+            average = Statistics.calcArithmeticMean(ratings, n)
+
+            # calculating Median
+
+            median = Statistics.calcMedian(ratings, n)
+
             # calculating mode
             mode = Statistics.calcMode(ratings)
 
@@ -54,3 +49,23 @@ class Statistics:
         elif highestNum == 1:
             print("All elements of list appear once.")
             return -1
+
+    def calcMedian(ratings, n):
+
+        # calculating the median
+        if n % 2 != 0:
+            median = ratings[int(n / 2)]
+        else:
+            # case when the len of the data is even.
+            median = float((ratings[int((n - 1) / 2)] + ratings[int(n / 2)]) / 2.0)
+        return median
+
+    def calcArithmeticMean(ratings, n):
+        sum = 0
+        for i in ratings:
+            sum += i
+        ## calculating arithmetic mean
+        average = sum / n
+        # round arithmetic to 5 digits
+        average = round(average, 5)
+        return average

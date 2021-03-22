@@ -1,11 +1,12 @@
 import unittest
-import statistic as statistic
+
+from assignment1 import statistic as stat
 
 
 class MyTestCase(unittest.TestCase):
 
     def test_computeMeanRating(self):
-        data = statistic.computeMeanRating("ratings.csv")
+        data = stat.computeMeanRating("ratings.csv")
         print(data)
         arith_means = data[0]
         median = data[1]
@@ -17,6 +18,8 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(median, 3.5)
         #mode
         self.assertEqual(mode, 4)
+
+
 
 
 

@@ -1,5 +1,5 @@
 import unittest
-import utilityModule as stat
+from assignment1 import utilityModule as stat
 
 
 class MyTestCase(unittest.TestCase):
@@ -16,6 +16,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(median, 3.5)
         # mode
         self.assertEqual(mode, 4)
+
 
 
 if __name__ == '__main__':
