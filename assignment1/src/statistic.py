@@ -1,4 +1,4 @@
-import csv
+
 
 def computeMeanRating(filename):
     ratings = []
@@ -11,7 +11,6 @@ def computeMeanRating(filename):
     finally:
         for line in f:
             columns = line.split(",")
-            ## im quite sure this is not best practice
             if columns[2] != "rating":
                 ratings.append(float((columns[2])))
 
@@ -22,7 +21,7 @@ def computeMeanRating(filename):
         ratings.sort()
 
         # calculating Arithmetic Mean
-        average = calcArithmeticMean(ratings, n)
+        mean = calcArithmeticMean(ratings, n)
 
         # calculating Median
 
@@ -31,7 +30,7 @@ def computeMeanRating(filename):
         # calculating mode
         mode = calcMode(ratings)
 
-        return average, median, mode
+        return mean, median, mode
 
 def calcMode(ratings):
         #Creating an Map where the amount of each number will be stored
@@ -43,6 +42,7 @@ def calcMode(ratings):
             #if the number already appears in the list count up
             if i in numCount.keys():
                 numCount[i] += 1
+            #else add the new number to the map
             else:
                 numCount[i] = 1
 
@@ -77,3 +77,7 @@ def calcArithmeticMean(ratings, n):
         # round arithmetic to 5 digits
         average = round(average, 5)
         return average
+
+
+if __name__ == '__main__':
+   print (computeMeanRating("ratings.csv"))

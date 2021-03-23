@@ -26,7 +26,7 @@ def show_genres(filename: str) -> Dict[str, int]:
 
 
 def main():
-    print(show_genres('ml-latest-small/movies.csv'))
+    print(show_genres('../ml-latest-small/movies.csv'))
 
 
 main()

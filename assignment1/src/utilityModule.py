@@ -10,7 +10,6 @@ class Statistics:
         finally:
             for line in f:
                 columns = line.split(",")
-                ## im quite sure this is not best practice
                 if columns[2] != "rating":
                     ratings.append(float((columns[2])))
 
@@ -21,7 +20,7 @@ class Statistics:
             ratings.sort()
 
             # calculating Arithmetic Mean
-            average = Statistics.calcArithmeticMean(ratings, n)
+            mean = Statistics.calcArithmeticMean(ratings, n)
 
             # calculating Median
 
@@ -30,7 +29,7 @@ class Statistics:
             # calculating mode
             mode = Statistics.calcMode(ratings)
 
-            return average, median, mode
+            return mean, median, mode
 
     def calcMode(ratings):
         # Creating an Map where the amount of each number will be stored
@@ -76,4 +75,3 @@ class Statistics:
         # round arithmetic to 5 digits
         average = round(average, 5)
         return average
-

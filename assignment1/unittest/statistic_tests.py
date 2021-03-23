@@ -1,6 +1,6 @@
 import unittest
 
-from assignment1 import statistic as stat
+from assignment1.src import statistic as stat
 
 """
 The numbers for the test were calculated with Excel
