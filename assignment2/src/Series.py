@@ -15,5 +15,7 @@ if __name__ == '__main__':
     # print last two elements
     print(series.tail(2))
 
+    #instance a series wich get the data from above
     indexedSeries = pd.Series(data, index=['a', 'b', 'c'])
+    #print value with the index b
     print(indexedSeries.get('b'))
