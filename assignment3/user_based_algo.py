@@ -13,6 +13,8 @@ def computeUserBased(userid, path):
 
     joinMovieUser = joined.merge(moviesDf, how="inner", on='movie_id')
 
+    joinMovieUser = joinMovieUser.dropna()
+
     ###SHOW FIRST 15 MOVIES + GENRES WICH WERE RATED BY THE GIVEN USER
 
     # showFirstFifteenMovies(joinMovieUser, userid)
@@ -53,37 +55,52 @@ def calcSimilarity(userDf, userid):
 
     currentUser = joinMean.iloc[1]
 
-    calculatePearsonSim(joinMean, currentUser)
+    calculatePearsonSim(joinMean.head(1000), currentUser)
 
-    print(joinMean)
+    print(joinMean.keys())
 
 
-def calculatePearsonSim(df, currentUser):
-    # COLUMNS FOR USER:
-    # movie_id[0], age[1], job[2],user_id[3],zipcode[4], rating[5], timestamp[6], rating_mean[10], rating_adapted[11]
-    users = df.values
-    curUser = currentUser.values
-    adj_curUser = curUser[11]
+def calculatePearsonSim(df, user_id):
+    df = pd.DataFrame(df)
+    currentUser = getUserGroup(user_id=user_id, df=df)
 
-    matchCount = 0
-    sim = pd.DataFrame(columns={"user_id", "sim"})
+    grouped = df.groupby('user_id')
 
-    for user in users:
-        top = 0
-        bot1 = 0
-        bot2 = 0
-        bottom = 0
-        sim_ = 0
-        adj_user = user[11]
+    for name,group in grouped:
 
-        if user[0] == curUser[0]:
-            top = top + (adj_user * adj_curUser)
-            bot1 = bot1 + pow(adj_curUser,2)
-            bot2 = bot2 + pow(adj_user,2)
-            bottom = np.sqrt(bot1 * bot2)
-            sim_0 = top / bottom
-            print(sim_0)
+        print(calcSimilarityBetweenTwoUsers(user_1=currentUser, user_2=group))
 
+
+def getUserGroup(user_id, df):
+    user = df[df["user_id"] == 3]
+
+    return user.groupby('user_id').get_group(
+        3
+    )
+
+
+def calcSimilarityBetweenTwoUsers(user_1, user_2):
+
+    user_1Df = pd.DataFrame(user_1)
+    user_2_Df = pd.DataFrame(user_2)
+
+    user_1Df = user_1Df.reset_index()
+    user_2_Df = user_2_Df.reset_index()
+    sim = 0
+    if (user_1Df['user_id'][0] != user_2_Df['user_id'][0]):
+
+
+        merged = pd.merge(user_1Df, user_2_Df, on=['movie_id'], how='inner')
+
+        merged['numenator'] = merged['rating_adapted_x'] * merged['rating_adapted_y']
+        numenator = merged['numenator'].sum()
+
+        merged['denominator'] = np.sqrt(pow(merged['rating_adapted_x'], 2)) * np.sqrt(pow(merged['rating_adapted_y'], 2))
+        denominator = merged['denominator'].sum()
+
+        sim = numenator / denominator
+
+    return sim
 
 
 if __name__ == '__main__':
