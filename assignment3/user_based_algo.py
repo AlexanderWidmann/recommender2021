@@ -176,8 +176,10 @@ def knn_recommend_movies(userid):
     # query to get the movies the current user watched
     current_movies = ratingsDf.query('UserId==' + str(userid))[movie_header[0]]
     neighbors_with_ratings = neighbors_with_ratings.query('MovieId not in @current_movies')
-    # filter out badly rated movies
-    neighbors_with_ratings = neighbors_with_ratings[neighbors_with_ratings[ratings_header[2]] > min_rating]
+    # filter out badly rated movies (average in the "neighborhood")
+    bad_avg_ratings = neighbors_with_ratings.groupby(movie_header[0]).agg('mean')
+    bad_avg_ratings = bad_avg_ratings[bad_avg_ratings[ratings_header[2]] < min_rating]
+    neighbors_with_ratings = neighbors_with_ratings.query('MovieId not in @bad_avg_ratings')
     # apply the relevance based on the similarity
     neighbors_with_ratings[neighbors_rated_header[1]] = neighbors_with_ratings[ratings_header[2]] * \
                                                         neighbors_with_ratings[neighbors_header[1]]
