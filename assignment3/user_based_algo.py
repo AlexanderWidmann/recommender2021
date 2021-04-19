@@ -25,7 +25,7 @@ neighbors_rated_header = ['MovieId', 'ScoredRating']
 
 # other metadata (like neighborhood_size and min overlap)
 movie_amount = 10
-neighborhood_size = 20
+neighborhood_size = 20 #default 20
 min_overlap = 3
 min_rating = 3
 
