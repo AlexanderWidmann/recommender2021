@@ -7,7 +7,7 @@ movie_header = ['MovieId', 'Title', 'Genre']
 ratings_header = ['UserId', 'MovieId', 'Ratings', 'Timestamp']
 user_header = ['UserId', 'Gender', 'Age', 'Occupation', 'ZipCode']
 
-genre_counter_header = ['UserId', 'Genre', 'Amount']
+genre_counter_header = ['Genre', 'Amount']
 
 
 def get_data(id):
@@ -52,17 +52,28 @@ def countGenres():
     # then merge with the movie-data to get the movie-information
     current_user_movies = current_user.merge(moviesDf, how='inner', on=movie_header[0])
 
+    # Get every genre which were rated higher than 3
     genre_count = current_user_movies[current_user_movies[ratings_header[2]] > 3]
-    genre_count = genre_count['Genre'].value_counts()
+    # counted the genres and added to new dataframe
+    genre_count = genre_count[genre_counter_header[0]].value_counts().to_frame(genre_counter_header[1]).reset_index()
 
-    print(genre_count)
+    # renamed the column index to genre
+    genre_count = genre_count.rename(columns={"index": genre_counter_header[0]})
 
-    return
+    print (genre_count)
+
+    return genre_count
 
 
-def split(x):
-    y = x.split("|")
-    return y
+def simple_contend_based():
+    genre_count = countGenres()
+
+    recommended_movies = moviesDf.merge(genre_count, how ="inner", on = "Genre")
+
+
+    recommended_movies = recommended_movies.sort_values(by='Amount', ascending=False)
+
+    print(recommended_movies[['Title', 'Genre']].head(15))
 
 
 if __name__ == '__main__':
@@ -75,4 +86,4 @@ if __name__ == '__main__':
     # print the first 15 movies for the selected user
     show_first_fifteen_movies(userid)
 
-    countGenres()
+    simple_contend_based()
