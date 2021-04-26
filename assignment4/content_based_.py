@@ -78,9 +78,8 @@ def countGenres():
 # Additional, the values will be sorted by the Amount of the ratings.
 def simple_content_based():
     # filter movies the user already rated
-    current_user = ratingsDf.loc[userid]
-    # sort the movies by the amount of the rated genres.
-    recommended_movies = moviesDf.query('MovieId not in @current_user')
+    current_user = ratingsDf[movie_header[0]].loc[userid]
+    recommended_movies = moviesDf.query('MovieId not in @current_user').copy()
     recommended_movies[overlap_string] = calculate_overlap()
     recommended_movies[score_string] = recommended_movies[overlap_string]
     return recommended_movies
@@ -106,9 +105,8 @@ def calculate_overlap():
 
 def extended_content_based():
     # filter movies the user already rated
-    current_user = ratingsDf.loc[userid]
-    # sort the movies by the amount of the rated genres.
-    recommended_movies = moviesDf.query('MovieId not in @current_user')
+    current_user = ratingsDf[movie_header[0]].loc[userid]
+    recommended_movies = moviesDf.query('MovieId not in @current_user').copy()
     weighted_genres = genreDf * countGenres()
     # replace 0 with nan for easier maths
     weighted_genres = weighted_genres.replace(0, np.nan).mean(axis='columns')
