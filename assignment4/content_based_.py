@@ -126,7 +126,7 @@ if __name__ == '__main__':
 
     # print the first 15 movies for the selected user
 
-    # show_first_fifteen_movies(userid)
+    show_first_fifteen_movies(userid)
 
     # here are the 3 algorithms
     # rec = simple_content_based()

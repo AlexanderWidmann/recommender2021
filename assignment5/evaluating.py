@@ -1,6 +1,7 @@
-import pandas as pd
-import numpy as np
 import time
+
+import numpy as np
+import pandas as pd
 from sklearn.model_selection import train_test_split
 
 pd.set_option('display.max_rows', 1000)
@@ -164,9 +165,6 @@ def get_nearest_neighbors(userid):
         }]
 
     result = pd.DataFrame(user_helper)
-    # only use the relative overlap (compared to the maximum occurring overlap) to create easier to read numbers
-    result[neighbors_helper_header[1]] = result[neighbors_helper_header[1]].div(
-        result[neighbors_helper_header[1]].max())
     # calculate the final relevance score by multiplying the pearson correlation and the relative overlap
     result[neighbors_header[1]] = result[neighbors_helper_header[0]] * result[neighbors_helper_header[1]]
     # sort the dataframe (biggest first) and return the number of neighbors defined in the neighborhood_size
@@ -195,6 +193,14 @@ def knn_recommend_movies(userid):
     #  'mean')
     # get the ids of the best rated movies by the neighbors
     # chosen_movies = movies_avg_rating.nlargest(movie_amount, neighbors_rated_header[1])[movie_header[0]]
+
+    # weight the score relative to the maximum relevance score
+    neighbors_with_ratings[neighbors_rated_header[1]] =neighbors_with_ratings[neighbors_rated_header[1]].div(
+        neighbors_with_ratings[neighbors_rated_header[1]])
+    #  get a relative rating for the recommended movies (rating will fluctuate between 3 and 5
+    # -> since the user should at least find the recommended move average)
+    neighbors_with_ratings[neighbors_rated_header[1]] = neighbors_with_ratings[neighbors_rated_header[1]] * 2 + 3
+
     return neighbors_with_ratings
 
 
@@ -230,10 +236,6 @@ def compute_user_item_matrix():
     # compute the values for every user in the test set
     for user_id in test_users_id:
         scored_df = scored_df.append(knn_recommend_movies(user_id), ignore_index=True)
-
-    # add the values to the dataframe
-    scored_df = pd.merge(scored_df, ratingsDf, how="left", on=["UserId", "MovieId", "Ratings"])
-
     return scored_df
 
 
@@ -302,7 +304,8 @@ if __name__ == '__main__':
 
     # get the user-item matrix
     scored_df = compute_user_item_matrix()
-
+    # to replay NaN values with 0 (to prevent errors in the calculation)
+    scored_df.fillna(0, inplace=True)
     # compute the evaluation metrics
     MAE = compute_MAE(scored_df)
     RMSE = compute_RMSE(scored_df)
