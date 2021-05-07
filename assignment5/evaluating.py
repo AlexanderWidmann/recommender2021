@@ -32,7 +32,7 @@ evaluation_header = ['RelevanceRating', 'RelevanceScore']
 
 # other metadata (like neighborhood_size and min overlap)
 movie_amount = 10
-neighborhood_size = 50  # default 20
+neighborhood_size = 20  # default 20
 min_overlap = 3
 min_rating = 3
 
@@ -233,6 +233,7 @@ def compute_user_item_matrix():
     scored_df = pd.DataFrame(columns=["UserId", "MovieId", "Ratings", "Similarity", "ScoredRating"])
 
     test_users_id = test_ratings['UserId'].unique()
+
     # compute the values for every user in the test set
     for user_id in test_users_id:
         scored_df = scored_df.append(knn_recommend_movies(user_id), ignore_index=True)
@@ -296,7 +297,7 @@ if __name__ == '__main__':
 
     # initialize the data
     moviesDf = pd.DataFrame(get_data(0))
-    ratingsDf = pd.DataFrame(get_data(1).head(500))
+    ratingsDf = pd.DataFrame(get_data(1).head(10000))
     usersDf = pd.DataFrame(get_data(2))
 
     # Split the dataset

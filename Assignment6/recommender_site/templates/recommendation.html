@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<h1>Your personal recommendation </h1>
+
+
+<div class="RecommenderClass">
+    <table class="RecommenderTable">
+        <thead class="thead-dark">
+        <th>Movie Title</th>
+        <th>Genre</th>
+        <th>Overview</th>
+        <th>Release Date</th>
+        <th>Runtime</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <!-- jinja2 Technique -->
+        {% if d %}
+            {% for i in d %}
+                <tr>
+                    <td>{{ i.Title }}</td>
+                    <td>{{ i.Genre }}</td>
+                    <td>{{ i.overview }}</td>
+                    <td>{{ i.release_date }}</td>
+                    <td>{{ i.runtime }}</td>
+                    <td><img src="https://www.themoviedb.org/t/p/original{{ i.poster_path }}" border="3" height="100"
+                             width="100"></td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+
+
+</div>
+
+
+</body>
+</html>
