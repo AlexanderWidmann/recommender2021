@@ -17,7 +17,7 @@ def index(request):
 def get_id(request):
     if request.method == "POST":
         #get the given id
-        user_id = int(request.POST['user_id'])
+        user_id = int(request.POST['user_id']) + 1
         print(user_id)
         #get the recommended movies incl meta data  as json file
         movies = cf.get_recommended_movies_JSON(user_id)

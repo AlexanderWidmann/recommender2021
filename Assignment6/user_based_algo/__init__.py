@@ -5,7 +5,7 @@ import json
 pd.set_option('display.max_rows', 1000)
 
 #PATH IS ABSOLUT, not sure know why this not working otherwise
-path = "C:/Users/User/PycharmProjects/Assignment6/user_based_algo/MovieLens_1M/"
+path = "../Assignment6/user_based_algo/MovieLens_1M/"
 
 
 # dataset is pulled from:
@@ -28,7 +28,7 @@ neighbors_helper_header = ['RatingSim', 'Overlap']
 neighbors_rated_header = ['MovieId', 'ScoredRating']
 
 # other metadata (like neighborhood_size and min overlap)
-movie_amount = 10
+movie_amount = 20
 neighborhood_size = 20  # default 20
 min_overlap = 3
 min_rating = 3
