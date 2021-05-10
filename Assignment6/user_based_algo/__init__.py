@@ -1,12 +1,12 @@
+from pathlib import Path
+
 import pandas as pd
-import numpy as np
 import json
 
 pd.set_option('display.max_rows', 1000)
-
-#PATH IS ABSOLUT, not sure know why this not working otherwise
-path = "C:/Users/User/PycharmProjects/Assignment6/user_based_algo/MovieLens_1M/"
-
+# The Movielens dataset has to be in the same package as this file
+p = Path(__file__).parent
+path = p.joinpath('MovieLens_1M')
 
 # dataset is pulled from:
 # https://grouplens.org/datasets/movielens/1m/
@@ -28,7 +28,7 @@ neighbors_helper_header = ['RatingSim', 'Overlap']
 neighbors_rated_header = ['MovieId', 'ScoredRating']
 
 # other metadata (like neighborhood_size and min overlap)
-movie_amount = 10
+movie_amount = 20
 neighborhood_size = 20  # default 20
 min_overlap = 3
 min_rating = 3
@@ -39,13 +39,13 @@ min_rating = 3
 def get_data(id):
     # needed to properly import the MovieLens-1M Dataset
     if id == 0:
-        return pd.read_csv(path + 'movies.dat', sep='::', engine='python', header=None, names=movie_header)
+        return pd.read_csv(path.joinpath('movies.dat'), sep='::', engine='python', header=None, names=movie_header)
     elif id == 1:
-        return pd.read_csv(path + 'ratings.dat', sep='::', engine='python', header=None, names=ratings_header)
+        return pd.read_csv(path.joinpath('ratings.dat'), sep='::', engine='python', header=None, names=ratings_header)
     elif id == 2:
-        return pd.read_csv(path + 'users.dat', sep='::', engine='python', header=None, names=user_header)
+        return pd.read_csv(path.joinpath('users.dat'), sep='::', engine='python', header=None, names=user_header)
     elif id == 3:
-        return pd.read_csv(path + 'movies_metadata.csv', engine='python')
+        return pd.read_csv(path.joinpath('movies_metadata.csv'), engine='python')
     else:
         return
 
@@ -205,28 +205,24 @@ def knn_recommend_movies(userid):
     chosen_movies = movies_avg_rating.nlargest(movie_amount, neighbors_rated_header[1])[movie_header[0]]
     return moviesDf.query('MovieId in @chosen_movies')
 
-
+#get the recommended movies as JSON File
+#JSON-Files are easier to handle for html files
 def get_recommended_movies_JSON(userid):
     recommended_movies = knn_recommend_movies(userid)
-
+    #merge with the meta dataset, so we can acess to information like descibition, Release Date etc.
     recommended_movies_meta = pd.merge(recommended_movies, metaDf, on=movie_header[0], how="left")
-
+    #convert the dataframe to an json file and return it.
     json_movies = recommended_movies_meta.reset_index().to_json(orient='records')
     data = []
     data = json.loads(json_movies)
     movies_context = {'d': data}
     return movies_context
 
-
+#get the ids, which are needed to display on the first site
 def getIds():
     ids = usersDf[user_header[0]].to_dict()
     # parse the dictionary to list
     id_list = zip(ids.keys(), ids.values())
-
     id_list = list(id_list)
 
     return id_list
-
-
-if __name__ == '__main__':
-    get_recommended_movies_JSON(3)
