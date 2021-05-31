@@ -22,23 +22,23 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <h1>Welcome to our page</h1>
+<h1>Welcome to our page</h1>
 
-    <div>
-        <h5>
-            Please enter your ID:
-        </h5>
-    </div>
+<div>
+    <h5>
+        Please enter the movie id:
+    </h5>
+</div>
 
-    <div class="row justify-content-center">
-        <form class="form-row" action="get_id" method="post">
-            {% csrf_token %}
-            {{ form.user_id }}
-            <input type="submit">
+<div class="row justify-content-center">
+    <form class="form-row" action="getMovies" method="post">
+        {% csrf_token %}
+        {{ form.movie_name }}
+        <button type="submit"><i class="fa fa-search"></i></button>
 
-        </form>
-    </div>
-
+    </form>
+</div>
 </body>
 </html>

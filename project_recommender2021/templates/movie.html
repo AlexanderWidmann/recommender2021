@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+</head>
+<body>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
     <!-- A small stylesheet to better display the content -->
     <style type="text/css">
         h1 {
@@ -21,7 +26,7 @@
         }
     </style>
 </head>
-<body>
+
 <!-- Importing Bootstrap -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -32,7 +37,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<h1 class="mt-2">Your personal recommendation </h1>
+<h1 class="mt-2">Overview Searched Movie </h1>
 
 
 <div class="justify-content-center">
@@ -43,7 +48,7 @@
         <th>Overview</th>
         <th>Release Date</th>
         <th>Runtime</th>
-        <th>Poster</th>
+        <th></th>
 
 
         </thead>
@@ -60,8 +65,10 @@
                     <td>{{ i.release_date }}</td>
                     <td>{{ i.runtime }}</td>
                     <!-- not every image can be accessed -->
-                    <td><img src="https://www.themoviedb.org/t/p/original{{ i.poster_path }}" border="3" height="100"
-                             width="100"></td>
+                    <td><form method="get" action="">
+                        <button>Show all details</button>
+
+                    </form></td>
                 </tr>
             {% endfor %}
         {% endif %}
