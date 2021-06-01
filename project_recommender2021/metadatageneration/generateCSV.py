@@ -8,7 +8,7 @@ relative_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 json_pattern = os.path.join(relative_path,'metadatageneration','extracted_jsons','*.json')
 file_list = glob.glob(json_pattern)
 
-meta_header = ['title', 'genres', 'runtime', 'directors', 'actors', 'languages', 'releaseDate', 'dvdReleaseDate', 'movieId', 'mpaa', 'imdbMovieId', 'originalTitle', 'youtubeTrailerIds', 'plotSummary', 'tmdbMovieId', 'avgRating', 'releaseYear', 'numRatings', 'posterPath', 'tmdb-keywords',
+meta_header = ['title', 'genres', 'runtime', 'directors', 'actors', 'languages', 'releaseDate', 'dvdReleaseDate', 'movieId', 'mpaa', 'imdbMovieId', 'originalTitle', 'youtubeTrailerIds', 'plotSummary', 'tmdbMovieId', 'avgRating', 'releaseYear', 'numRatings', 'posterPath',
                'tmdb-keywords', 'tmdb-production-companies', 'tmdb-budged', 'tmdb-revenue', 'tmdb-runtime', 'tmdb-vote-average', 'tmdb-collection-name',
                'imdb-country', 'imdb-reviews', 'imdb-production-companies']
 
@@ -48,8 +48,7 @@ for file in file_list:
 
     df = df.append(pd.Series(data= movielens))
 
-df = df.rename(columns = {'movieId': 'MovieId'})
-df = df.set_index('MovieId')
+df = df.set_index('movieId')
 # concatenate all the data frames in the list
 df.to_csv('custom_metadata.csv', sep=',')
 print(df)

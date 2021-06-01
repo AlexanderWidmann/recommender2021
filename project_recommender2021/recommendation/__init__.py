@@ -7,7 +7,7 @@ import pandas as pd
 pd.set_option('display.max_rows', 1000)
 pd.set_option('display.max_columns', 20)
 
-movie_header = ['movieId', 'title', 'genre']
+movie_header = ['movieId', 'title', 'genres']
 ratings_header = ['userId', 'movieId', 'ratings', 'timestamp']
 genome_scores_header = ['movieId', 'tagId', 'relevance']
 genome_tags_header = ['tagId', 'tag']
@@ -34,17 +34,16 @@ def get_data(id):
         return
 
 
-moviesDf = pd.DataFrame(get_data(0)).head(1000)
-ratingsDf = pd.DataFrame(get_data(1)).head(1000)
-genome_scoresDf = pd.DataFrame(get_data(2)).head(1000)
-genome_tagsDf = pd.DataFrame(get_data(3)).head(1000)
-tags_Df = pd.DataFrame(get_data(4)).head(1000)
+moviesDf = pd.DataFrame(get_data(0))
+ratingsDf = pd.DataFrame(get_data(1))
+genome_scoresDf = pd.DataFrame(get_data(2))
+genome_tagsDf = pd.DataFrame(get_data(3))
+tags_Df = pd.DataFrame(get_data(4))
 
 
 def find_movie(movie_name):
-    movie_tagsDf = merge_tags()
 
-    movies = movie_tagsDf[movie_tagsDf[movie_header[1]].str.contains(movie_name, regex=True, flags=re.IGNORECASE)]
+    movies = moviesDf[moviesDf[movie_header[1]].str.contains(movie_name, regex=True, flags=re.IGNORECASE)]
     return movies
 
 
@@ -65,8 +64,6 @@ def movie_json(movie_name):
     searched_movies = find_movie(movie_name=movie_name)
     # replace | with comma in genres
     searched_movies[movie_header[2]] = searched_movies[movie_header[2]].str.replace("|", ',')
-    # Remove the release year
-    searched_movies[movie_header[1]] = searched_movies[movie_header[1]].str.replace("[^a-zA-Z\s]", "")
     # convert to json
     json_movies = searched_movies.reset_index().to_json(orient='records')
     data = []
