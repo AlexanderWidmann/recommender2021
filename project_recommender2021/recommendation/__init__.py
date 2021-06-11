@@ -31,10 +31,7 @@ def get_data(id):
     elif id == 4:
         return pd.read_csv(path.joinpath('tags.csv'), engine='python', nrows=10000)
     elif id == 5:
-        return pd.read_csv(path_sample.joinpath('links.csv'), engine="python")
-    elif id == 6:
-        return pd.read_csv(path_sample.joinpath('movies_metadata.csv'), engine="python")
-
+        return pd.read_csv(path.joinpath('custom_metadata.csv'), engine="python", nrows=10000)
     else:
         return
 
@@ -54,6 +51,7 @@ def get_sample_data(id):
         return pd.read_csv(path_sample.joinpath('links.csv'), engine="python")
     elif id == 6:
         return pd.read_csv(path_sample.joinpath('movies_metadata.csv'), engine="python")
+
     else:
         return
 
@@ -63,27 +61,16 @@ ratingsDf = pd.DataFrame(get_data(1))
 genome_scoresDf = pd.DataFrame(get_data(2))
 genome_tagsDf = pd.DataFrame(get_data(3))
 tags_Df = pd.DataFrame(get_data(4))
-meta_linksDf = pd.DataFrame(get_data(5))
-metaDataDf = pd.DataFrame(get_data(6))
-meta_linksDf.rename(columns={"tmdbId": "id"}, inplace=True)
+movies_metaDataDf = pd.DataFrame(get_data(5))
 
 
 def find_movies(movie_name):
-    searched_movies = moviesDf[moviesDf[movie_header[1]].str.contains(movie_name, regex=True, flags=re.IGNORECASE)]
+    searched_movies = movies_metaDataDf[(
+            movies_metaDataDf[movie_header[1]].str.contains(movie_name, regex=True, flags=re.IGNORECASE) |
+            movies_metaDataDf['tmdb-keywords'].str.contains(movie_name, regex=True, flags=re.IGNORECASE) |
+            movies_metaDataDf['directors'].str.contains(movie_name, regex=True, flags=re.IGNORECASE))]
+    searched_movies.sort_values(by="avgRating", ascending=False, inplace=True)
     return searched_movies
-
-
-def get_metadata(mDf):
-    tmp = pd.merge(mDf, meta_linksDf, how="left", on=movie_header[0])
-    tmp['imdbId'] = "tt0" + tmp['imdbId'].astype(str)
-
-    metaDataDf['imdb_id'] = metaDataDf['imdb_id'].astype(str)
-
-    mDf = pd.merge(tmp, metaDataDf[
-        ['adult', 'overview', 'popularity', 'release_date', 'runtime', 'vote_average', 'vote_count', 'imdb_id']],
-                   how="left", left_on="imdbId", right_on="imdb_id")
-
-    return mDf
 
 
 def merge_tags():
@@ -101,7 +88,7 @@ def merge_tags():
 def movie_json(movie_name):
     # find the movies based on movie_name
     searched_movies = find_movies(movie_name=movie_name)
-    searched_movies = get_metadata(searched_movies)
+
     # replace | with comma in genres
     searched_movies[movie_header[2]] = searched_movies[movie_header[2]].str.replace("|", ',')
     # Remove the release year
@@ -116,10 +103,9 @@ def movie_json(movie_name):
 
 def find_movie_by_id(id):
     id = int(id)
-    movie = moviesDf[moviesDf['movieId'] == id]
-    movie = get_metadata(movie)
+    movie = movies_metaDataDf[movies_metaDataDf['MovieId'] == id]
     return movie
 
 
 if __name__ == '__main__':
-    get_metadata(find_movies("Toy Story"))
+    print(movies_metaDataDf[['posterPath', 'title']].head(5))
