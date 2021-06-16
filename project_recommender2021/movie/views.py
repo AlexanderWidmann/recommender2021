@@ -19,5 +19,18 @@ def showMovie(request):
     form.releaseYear = df['releaseDate']
     form.directors = hp.toString(df['directors'].iloc[0])
     form.actors = hp.toString(df['actors'].iloc[0])
+    form.movieId = id
 
     return render(request, "movie.html", {"form": form})
+
+
+def showRecommendationTags(request):
+    id = request.POST.get("id")
+    movies = rec.similiarMovieKeywords(id)
+    return render(request, "recommandation.html", movies)
+
+
+def showRecommendationActors(reqeuest):
+    id = reqeuest.POST.get("id")
+    movies = rec.similiarMovieActors(id)
+    return render(reqeuest, "recommandation.html", movies)

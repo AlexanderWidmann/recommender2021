@@ -20,7 +20,9 @@ from movie import views as movie_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',index_views.index, name='home'),
+    path('', index_views.index, name='home'),
     path('getMovies', index_views.getMovies, name='movies'),
-    path('showMovie', movie_views.showMovie, name = 'showMovie')
+    path('showMovie', movie_views.showMovie, name='showMovie'),
+    path('showRecommendationTags', movie_views.showRecommendationTags, name="showRecommandationTags"),
+    path("showRecommendationActors", movie_views.showRecommendationActors, name="showRecommendationActors")
 ]

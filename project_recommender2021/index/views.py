@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django import forms
+
 import recommendation as rec
 from index.forms import MoviesForm
 
@@ -16,4 +16,3 @@ def getMovies(request):
         movie = rec.movie_json(movie_name)
 
     return render(request, "overview_movies.html", movie)
-

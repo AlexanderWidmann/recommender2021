@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 
 import pandas as pd
-from sklearn.feature_extraction.text import CountVectorizer
+
 
 pd.set_option('display.max_rows', 1000)
 pd.set_option('display.max_columns', 20)
