@@ -1,4 +1,4 @@
-import __init__ as it
+
 import pandas as pd
 
 
@@ -32,6 +32,3 @@ def itemSimilarityRatings(id, data):
     similiar_movies.drop(0, inplace=True)
     return similiar_movies
 
-
-if __name__ == '__main__':
-    itemSimilarityRatings(1, it.getData())

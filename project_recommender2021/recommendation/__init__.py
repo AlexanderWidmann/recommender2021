@@ -4,9 +4,9 @@ from difflib import SequenceMatcher
 from pathlib import Path
 
 import numpy as np
-
+import similarity_ratings as sr
 import pandas as pd
-from sklearn.feature_extraction.text import CountVectorizer
+
 
 pd.set_option('display.max_rows', 1000)
 pd.set_option('display.max_columns', 20)
@@ -21,7 +21,7 @@ p = Path(__file__).parent
 path = p.joinpath('ml-25m')
 path_sample = p.joinpath('ml-25m-sample')
 
-AmountRows = 1000000
+AmountRows = 10000
 
 
 def get_data(id):
@@ -101,7 +101,8 @@ def movie_json(movie_name):
     searched_movies[movie_header[1]] = searched_movies[movie_header[1]].str.replace("[^a-zA-Z\s]", "")
     return to_JSON(df=searched_movies)
 
-#Transform a df to a JSON-File,in order to be able to process it better in the frontend
+
+# Transform a df to a JSON-File,in order to be able to process it better in the frontend
 def to_JSON(df):
     json_movies = df.reset_index().to_json(orient='records')
     data = []
@@ -109,13 +110,15 @@ def to_JSON(df):
     movies_context = {'d': data}
     return movies_context
 
-#Returns a movie based on the given id
+
+# Returns a movie based on the given id
 def find_movie_by_id(id):
     id = int(id)
     movie = movies_metaDataDf[movies_metaDataDf['MovieId'] == id]
     return movie
 
-#finds the similar movie based on pattern in keywords
+
+# finds the similar movie based on pattern in keywords
 def similiarMoviesPattern(id):
     tmp_movies = movies_metaDataDf
     movie = find_movie_by_id(id)
@@ -130,7 +133,8 @@ def similiarMoviesPattern(id):
 
     return tmp_movies
 
-#finds similar movies based on the amount of overlaping keywords
+
+# finds similar movies based on the amount of overlaping keywords
 def similiarMovieKeywords(id):
     tmp_movies = movies_metaDataDf
     movie = find_movie_by_id(id)
@@ -148,10 +152,10 @@ def similiarMovieKeywords(id):
 
     tmp_movies['overlap'] = tmp_movies["tmdb-keywords"].apply(lambda x: calcOverlap(x, set_keywords))
     tmp_movies.sort_values(by="overlap", ascending=False, inplace=True)
-
     return to_JSON(tmp_movies.head(20))
 
-#finds similar movies based on the amount of overlaping Actors
+
+# finds similar movies based on the amount of overlaping Actors
 def similiarMovieActors(id):
     tmp_movies = movies_metaDataDf
     movie = find_movie_by_id(id)
@@ -164,8 +168,12 @@ def similiarMovieActors(id):
     # len(set(pattern.sub(" ",tmp_movies['tmdb-keywords'].iloc[0]).split(" ")).intersection(set_keywords))
     tmp_movies['overlap'] = tmp_movies["actors"].apply(lambda x: calcOverlap(x, set_keywords))
     tmp_movies.sort_values(by="overlap", ascending=False, inplace=True)
-
+    tmp_movies.drop(0, inplace=True)
     return to_JSON(tmp_movies.head(20))
+
+
+def similarMovieRatings(id):
+    return to_JSON(sr.itemSimilarityRatings(id, getData()))
 
 
 def calcOverlap(x, set_keywords):
@@ -178,11 +186,11 @@ def calcOverlap(x, set_keywords):
 
 
 def getData():
-    #returns all the data, which is necessary for other files
+    # returns all the data, which is necessary for other files
     return moviesDf, ratingsDf, genome_scoresDf, genome_tagsDf, tags_Df, movies_metaDataDf
 
 
 if __name__ == '__main__':
     # algo1(1)
     # print(similiarMovieKeywords(1))
-    print(similiarMovieActors(1))
+    print()
