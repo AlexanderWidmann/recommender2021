@@ -1,5 +1,5 @@
 import pandas as pd
-
+import re
 path = "../recommendation/ml-25m/"
 
 
@@ -28,5 +28,11 @@ def exportCSV(path, factor):
     dataFrames[4].to_csv(path + "tags-sample.csv")
 
 
+
+def toString(s):
+
+    x = re.sub(pattern="\W",string= s, repl=" ")
+    return x
+
 if __name__ == '__main__':
-    exportCSV("../recommendation/", 20)
+    toString("['Adventure', 'Fantasy', 'Family']")

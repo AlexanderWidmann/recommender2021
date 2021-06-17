@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- A small stylesheet to better display the content -->
+    <style type="text/css">
+        h1 {
+            text-align: center;
+        }
+
+
+        td {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        thead {
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<!-- Importing Bootstrap -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<h1 class="mt-2">Overview Recommended Movies </h1>
+
+
+<div class="justify-content-center">
+    <table class="table table-striped table-hover">
+        <thead class="thead-dark">
+        <th>Movie Title</th>
+        <th>Genre</th>
+        <th>Overview</th>
+        <th>Release Date</th>
+        <th>Runtime</th>
+        <th></th>
+
+
+        </thead>
+        <tbody>
+        <!-- fill the table with the content, which is given from the json file -->
+        {% if d %}
+            <!-- iterate over the json file -->
+            {% for i in d %}
+                <tr>
+                    <!-- iterate over the json file and get the Values from every column -->
+                    <td>{{ i.title }}</td>
+                    <td>{{ i.genres }}</td>
+                    <td>{{ i.plotSummary }}</td>
+                    <td>{{ i.releaseDate }}</td>
+                    <td>{{ i.runtime }}</td>
+
+                </tr>
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+
+
+</div>
+
+</body>
+</html>
