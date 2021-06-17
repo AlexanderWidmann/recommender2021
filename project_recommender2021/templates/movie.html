@@ -44,7 +44,11 @@
         </form>
     </th>
     <th>
-        <button class="btn btn-info">Recommender #3</button>
+        <form method="post" action="showRecommendationRatings">
+            <button class="btn btn-info" name="id" value={{ form.movieId }}>Show recommendation based on ratings
+            </button>
+            {% csrf_token %}
+        </form>
     </th>
     <th>
         <button class="btn btn-info">Recommender #4</button>

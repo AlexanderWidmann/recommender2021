@@ -4,7 +4,7 @@ from difflib import SequenceMatcher
 from pathlib import Path
 
 import numpy as np
-
+import similarity_ratings as sr
 import pandas as pd
 
 
@@ -102,6 +102,7 @@ def movie_json(movie_name):
     return to_JSON(df=searched_movies)
 
 
+# Transform a df to a JSON-File,in order to be able to process it better in the frontend
 def to_JSON(df):
     json_movies = df.reset_index().to_json(orient='records')
     data = []
@@ -110,13 +111,15 @@ def to_JSON(df):
     return movies_context
 
 
+# Returns a movie based on the given id
 def find_movie_by_id(id):
     id = int(id)
     movie = movies_metaDataDf[movies_metaDataDf['MovieId'] == id]
     return movie
 
 
-def algo1(id):
+# finds the similar movie based on pattern in keywords
+def similiarMoviesPattern(id):
     tmp_movies = movies_metaDataDf
     movie = find_movie_by_id(id)
     # this is necessary, because otherwise the SequenceMatcher thinks that NaN is a float Number
@@ -131,22 +134,28 @@ def algo1(id):
     return tmp_movies
 
 
+# finds similar movies based on the amount of overlaping keywords
 def similiarMovieKeywords(id):
     tmp_movies = movies_metaDataDf
     movie = find_movie_by_id(id)
+    # Drop rows which don't contain any keywords
     tmp_movies['tmdb-keywords'].dropna(inplace=True)
+    # Replace NaN with space, otherwise pandas assumes that NaN is a float value. This leads to an exception
     tmp_movies['tmdb-keywords'].replace(np.NaN, " ", inplace=True)
+    # Remove all braces, commas etc
     pattern = re.compile(r"\W+")
+    # get the keywords as string
     keywords = movie['tmdb-keywords'].iloc[0]
     keywords = pattern.sub(" ", keywords)
+    # create a set of keywords
     set_keywords = set(keywords.split(" "))
-    # len(set(pattern.sub(" ",tmp_movies['tmdb-keywords'].iloc[0]).split(" ")).intersection(set_keywords))
+
     tmp_movies['overlap'] = tmp_movies["tmdb-keywords"].apply(lambda x: calcOverlap(x, set_keywords))
     tmp_movies.sort_values(by="overlap", ascending=False, inplace=True)
-
     return to_JSON(tmp_movies.head(20))
 
 
+# finds similar movies based on the amount of overlaping Actors
 def similiarMovieActors(id):
     tmp_movies = movies_metaDataDf
     movie = find_movie_by_id(id)
@@ -159,22 +168,29 @@ def similiarMovieActors(id):
     # len(set(pattern.sub(" ",tmp_movies['tmdb-keywords'].iloc[0]).split(" ")).intersection(set_keywords))
     tmp_movies['overlap'] = tmp_movies["actors"].apply(lambda x: calcOverlap(x, set_keywords))
     tmp_movies.sort_values(by="overlap", ascending=False, inplace=True)
-
+    tmp_movies.drop(0, inplace=True)
     return to_JSON(tmp_movies.head(20))
 
 
+def similarMovieRatings(id):
+    return to_JSON(sr.itemSimilarityRatings(id, getData()))
+
+
 def calcOverlap(x, set_keywords):
+    # Remove braces, commas etc.
     pattern = re.compile(r"\W+")
     keywords = pattern.sub(" ", x)
     tmp_set_keywords = set(keywords.split(" "))
+    # Check if there is any overlap, and count the amount of overlaps
     return len(tmp_set_keywords.intersection(set_keywords))
 
 
 def getData():
-    return moviesDf,ratingsDf, genome_scoresDf, genome_tagsDf, tags_Df, movies_metaDataDf
+    # returns all the data, which is necessary for other files
+    return moviesDf, ratingsDf, genome_scoresDf, genome_tagsDf, tags_Df, movies_metaDataDf
 
 
 if __name__ == '__main__':
     # algo1(1)
     # print(similiarMovieKeywords(1))
-    print(similiarMovieActors(1))
+    print()

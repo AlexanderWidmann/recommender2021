@@ -24,5 +24,6 @@ urlpatterns = [
     path('getMovies', index_views.getMovies, name='movies'),
     path('showMovie', movie_views.showMovie, name='showMovie'),
     path('showRecommendationTags', movie_views.showRecommendationTags, name="showRecommandationTags"),
-    path("showRecommendationActors", movie_views.showRecommendationActors, name="showRecommendationActors")
+    path("showRecommendationActors", movie_views.showRecommendationActors, name="showRecommendationActors"),
+    path("showRecommendationRatings", movie_views.showRecommendationRatings, name="showRecommendationRatings")
 ]

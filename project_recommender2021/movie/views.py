@@ -30,7 +30,12 @@ def showRecommendationTags(request):
     return render(request, "recommandation.html", movies)
 
 
-def showRecommendationActors(reqeuest):
-    id = reqeuest.POST.get("id")
+def showRecommendationActors(request):
+    id = request.POST.get("id")
     movies = rec.similiarMovieActors(id)
-    return render(reqeuest, "recommandation.html", movies)
+    return render(request, "recommandation.html", movies)
+
+def showRecommendationRatings(request):
+    id = request.POST.get("id")
+    movies = rec.similarMovieRatings(int(id))
+    return render(request, "recommandation.html", movies)
