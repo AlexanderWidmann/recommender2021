@@ -21,7 +21,7 @@ p = Path(__file__).parent
 path = p.joinpath('ml-25m')
 path_sample = p.joinpath('ml-25m-sample')
 
-AmountRows = 10000
+AmountRows = 1000000
 
 
 def get_data(id):
