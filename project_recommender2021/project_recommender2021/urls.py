@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+
 from index import views as index_views
 from movie import views as movie_views
 
@@ -24,6 +25,16 @@ urlpatterns = [
     path('getMovies', index_views.getMovies, name='movies'),
     path('showMovie', movie_views.showMovie, name='showMovie'),
     path('showRecommendationTags', movie_views.showRecommendationTags, name="showRecommandationTags"),
+    path('showRecommendationTagsPattern', movie_views.showRecommendationTagsPattern, name="showRecommandationTagsPattern"),
     path("showRecommendationActors", movie_views.showRecommendationActors, name="showRecommendationActors"),
-    path("showRecommendationRatings", movie_views.showRecommendationRatings, name="showRecommendationRatings")
+    path("showRecommendationRatings", movie_views.showRecommendationRatings, name="showRecommendationRatings"),
+    path("showRecommendationUserRatings", movie_views.showRecommendationUserRatings, name="showRecommendationUserRatings"),
+    path("showRecommendationSummary", movie_views.showRecommendationSummary, name="showRecommendationSummary"),
+
+    path("showComboRecommendationSimpleMetaMulti", movie_views.showComboRecommendationSimpleMetaMulti, name="showComboRecommendationSimpleMetaMulti"),
+    path("showComboRecommendationSimpleMeta", movie_views.showComboRecommendationSimpleMeta, name="showComboRecommendationSimpleMeta"),
+    path("showComboRecommendationAllUnweighted", movie_views.showComboRecommendationAllUnweighted, name="showComboRecommendationAllUnweighted"),
+    path("showComboRecommendationWeighted", movie_views.showComboRecommendationWeighted, name="showComboRecommendationWeighted"),
+    path("showComboRecommendationCustom", movie_views.showComboRecommendationCustom, name="showComboRecommendationCustom"),
+    path("showComboRecommendationAllCustom", movie_views.showComboRecommendationAllCustom, name="showComboRecommendationAllCustom"),
 ]
