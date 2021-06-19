@@ -70,6 +70,12 @@
                 {% csrf_token %}
             </form>
         </td>
+        <td>
+            <form method="post" action="showRecommendationGenrePopularity">
+                <button class="btn btn-info" name="id" value={{ form.movieId }}>Genre & Popularity</button>
+                {% csrf_token %}
+            </form>
+        </td>
     </tr>
     <tr>
         <td colspan= "6">
@@ -97,19 +103,19 @@
         </td>
         <td>
             <form method="post" action="showComboRecommendationWeighted">
-                <button class="btn btn-info" name="id" value={{ form.movieId }}>All algorithms (Popularity, Genre and Actors weighted more)</button>
+                <button class="btn btn-info" name="id" value={{ form.movieId }}>Custom weights (simple meta weighted more)</button>
                 {% csrf_token %}
             </form>
         </td>
         <td>
             <form method="post" action="showComboRecommendationCustom">
-                <button class="btn btn-info" name="id" value={{ form.movieId }}>Custom algorithms (Popularity (x3), Genre and UserRatings (x2)</button>
+                <button class="btn btn-info" name="id" value={{ form.movieId }}>Custom algorithms (rating + keywords weighted higher)</button>
                 {% csrf_token %}
             </form>
         </td>
         <td>
             <form method="post" action="showComboRecommendationAllCustom">
-                <button class="btn btn-info" name="id" value={{ form.movieId }}>All algorithms with custom weights for each</button>
+                <button class="btn btn-info" name="id" value={{ form.movieId }}>Custom weights</button>
                 {% csrf_token %}
             </form>
         </td>

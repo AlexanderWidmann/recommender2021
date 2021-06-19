@@ -60,6 +60,12 @@ def showRecommendationSummary(reqeuest):
     return render(reqeuest, "recommandation.html", movies)
 
 
+def showRecommendationGenrePopularity(request):
+    id = request.POST.get("id")
+    movies = rec.genrePopularity_recommender(id)
+    return render(request, "recommandation.html", movies)
+
+
 def showComboRecommendationSimpleMetaMulti(reqeuest):
     id = reqeuest.POST.get("id")
     movies = rec.simpleMetaMulitplicated_recommender(id)
@@ -88,7 +94,7 @@ def showComboRecommendationWeighted(reqeuest):
 def showComboRecommendationCustom(reqeuest):
     id = reqeuest.POST.get("id")
     movies = rec.allAlgorithmsWithOptionalFactors_recommender(id, genre_factor=3, popularity_factor=2, actors_factor=1, directors_factor=1,
-                                                              pattern_factor=0.2, keywords_factor=0.6, rating_factor=0.6, summary_factor=1)
+                                                              pattern_factor=0.2, keywords_factor=2, rating_factor=2, summary_factor=2)
     return render(reqeuest, "recommandation.html", movies)
 
 

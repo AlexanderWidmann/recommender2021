@@ -120,6 +120,13 @@ def find_movie_by_id(id):
     movie = movies_metaDataDf[movies_metaDataDf['MovieId'] == id]
     return movie
 
+def genrePopularity_recommender(id, amount=20):
+    tmp_movies = movies_metaDataDf
+    tmp_movies['similarity'] = getGenreOverlap(id) * getPopularity()
+    tmp_movies = tmp_movies.sort_values(by="similarity", ascending=False)
+    tmp_movies = tmp_movies.drop(tmp_movies[tmp_movies['MovieId'] == int(id)].index)
+    return to_JSON(tmp_movies.head(amount))
+
 
 # simpleMetaMulitplicated_recommender: genre, popularity, actors and directors
 def simpleMetaMulitplicated_recommender(id, amount=20):

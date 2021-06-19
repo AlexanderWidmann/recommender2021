@@ -30,6 +30,7 @@ urlpatterns = [
     path("showRecommendationRatings", movie_views.showRecommendationRatings, name="showRecommendationRatings"),
     path("showRecommendationUserRatings", movie_views.showRecommendationUserRatings, name="showRecommendationUserRatings"),
     path("showRecommendationSummary", movie_views.showRecommendationSummary, name="showRecommendationSummary"),
+    path("showRecommendationGenrePopularity", movie_views.showRecommendationGenrePopularity, name="showRecommendationGenrePopularity"),
 
     path("showComboRecommendationSimpleMetaMulti", movie_views.showComboRecommendationSimpleMetaMulti, name="showComboRecommendationSimpleMetaMulti"),
     path("showComboRecommendationSimpleMeta", movie_views.showComboRecommendationSimpleMeta, name="showComboRecommendationSimpleMeta"),
