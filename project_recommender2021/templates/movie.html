@@ -28,44 +28,97 @@
     <p>{{ form.actors }}</p>
 </div>
 
-<table class="table table-striped table-hover">
+<table class="table table-striped table-hover text-align:center" align="center">
     <tbody>
     <thead class="thead-dark">
-    <th>
-        <form method="post" action="showRecommendationTags">
-            <button class="btn btn-info" name="id" value={{ form.movieId }}>Show recommendation based on tags</button>
-            {% csrf_token %}
-        </form>
-    </th>
-    <th>
-        <form method="post" action="showRecommendationActors">
-            <button class="btn btn-info" name="id" value={{ form.movieId }}>Show recommendation based on actors</button>
-            {% csrf_token %}
-        </form>
-    </th>
-    <th>
-        <form method="post" action="showRecommendationRatings">
-            <button class="btn btn-info" name="id" value={{ form.movieId }}>Show recommendation based on ratings
-            </button>
-            {% csrf_token %}
-        </form>
-    </th>
-    <th>
-        <button class="btn btn-info">Recommender #4</button>
-    </th>
-    <th>
-        <button class="btn btn-info">Recommender #5</button>
-    </th>
-    <th></th>
-
-
+        <b>Recommender algorithms:</b>
     </thead>
     <tr>
-        <td>...</td>
-        <td>...</td>
-        <td>...</td>
-        <td>...</td>
-        <td>...</td>
+        <td colspan= "6">
+           <b>Base algorithms</b>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <form method="post" action="showRecommendationTags">
+                <button class="btn btn-info" name="id" value={{ form.movieId }}>tags</button>
+                {% csrf_token %}
+            </form>
+        </td>
+        <td>
+            <form method="post" action="showRecommendationTagsPattern">
+                <button class="btn btn-info" name="id" value={{ form.movieId }}>tags-pattern</button>
+                {% csrf_token %}
+            </form>
+        </td>
+        <td>
+            <form method="post" action="showRecommendationActors">
+                <button class="btn btn-info" name="id" value={{ form.movieId }}>actors</button>
+                {% csrf_token %}
+            </form>
+        </td>
+        <td>
+            <form method="post" action="showRecommendationRatings">
+                <button class="btn btn-info" name="id" value={{ form.movieId }}>user ratings
+                </button>
+                {% csrf_token %}
+            </form>
+        </td>
+        <td>
+            <form method="post" action="showRecommendationSummary">
+                <button class="btn btn-info" name="id" value={{ form.movieId }}>tfidf - summary</button>
+                {% csrf_token %}
+            </form>
+        </td>
+        <td>
+            <form method="post" action="showRecommendationGenrePopularity">
+                <button class="btn btn-info" name="id" value={{ form.movieId }}>Genre & Popularity</button>
+                {% csrf_token %}
+            </form>
+        </td>
+    </tr>
+    <tr>
+        <td colspan= "6">
+           <b>Combination algorithms</b>
+        </td>
+    </tr>
+    <tr>
+         <td>
+            <form method="post" action="showComboRecommendationSimpleMetaMulti">
+                <button class="btn btn-info" name="id" value={{ form.movieId }}>Simple Meta (multiplicative)</button>
+                {% csrf_token %}
+            </form>
+        </td>
+        <td>
+            <form method="post" action="showComboRecommendationSimpleMeta">
+                <button class="btn btn-info" name="id" value={{ form.movieId }}>Simple Meta</button>
+                {% csrf_token %}
+            </form>
+        </td>
+        <td>
+            <form method="post" action="showComboRecommendationAllUnweighted">
+                <button class="btn btn-info" name="id" value={{ form.movieId }}>All algorithms</button>
+                {% csrf_token %}
+            </form>
+        </td>
+        <td>
+            <form method="post" action="showComboRecommendationWeighted">
+                <button class="btn btn-info" name="id" value={{ form.movieId }}>Custom weights (simple meta weighted more)</button>
+                {% csrf_token %}
+            </form>
+        </td>
+        <td>
+            <form method="post" action="showComboRecommendationCustom">
+                <button class="btn btn-info" name="id" value={{ form.movieId }}>Custom algorithms (rating + keywords weighted higher)</button>
+                {% csrf_token %}
+            </form>
+        </td>
+        <td>
+            <form method="post" action="showComboRecommendationAllCustom">
+                <button class="btn btn-info" name="id" value={{ form.movieId }}>Custom weights</button>
+                {% csrf_token %}
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>

@@ -20,15 +20,15 @@ def itemSimilarityRatings(id, data):
     similiar_movies = movies_ratings_pivot.corrwith(ratings_movie)
 
     # Drop NaN Values
-    similiar_movies.dropna(inplace=True)
+    similiar_movies = similiar_movies.dropna()
     # Cast to DataFrame
-    similiar_movies = pd.DataFrame({"movieId": similiar_movies.index, "correlation": similiar_movies.values})
+    similiar_movies = pd.DataFrame({"movieId": similiar_movies.index, "similarity": similiar_movies.values})
 
     # Merge with MetaDataDf to get Information like Overview etc.
-    similiar_movies = pd.merge(similiar_movies, movies_metaDataDf, left_on="movieId", right_on="MovieId", how="inner")
-    # Sort by correlation
-    similiar_movies.sort_values(by="correlation", ascending=False, inplace=True)
-    # Drop the first Movie (Corr = 1)
-    similiar_movies.drop(0, inplace=True)
-    return similiar_movies.head(15)
+    merged_movies = pd.merge(movies_metaDataDf, similiar_movies, right_on="movieId", left_on="MovieId", how="inner")
+    print(list(movies_metaDataDf.columns))
+    print(similiar_movies)
+    print(merged_movies['similarity'])
+
+    return merged_movies['similarity']
 
