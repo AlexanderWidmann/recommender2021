@@ -2,7 +2,7 @@ import json
 import re
 from difflib import SequenceMatcher
 from pathlib import Path
-
+import helper as hp
 import numpy as np
 import pandas as pd
 from scipy.sparse import load_npz
@@ -20,7 +20,7 @@ p = Path(__file__).parent
 path = p.joinpath('ml-25m')
 path_sample = p.joinpath('ml-25m-sample')
 
-AmountRows = 10000
+AmountRows = 100
 
 
 def get_data(id):
@@ -99,16 +99,14 @@ def merge_tags():
 def movie_json(movie_name):
     # find the movies based on movie_name
     searched_movies = find_movies(movie_name=movie_name)
-
-    # replace | with comma in genres
-    searched_movies[movie_header[2]] = searched_movies[movie_header[2]].str.replace("|", ',')
-    # Remove the release year
-    searched_movies[movie_header[1]] = searched_movies[movie_header[1]].str.replace("[^a-zA-Z\s]", "")
     return to_JSON(df=searched_movies)
 
 
-# Transform a df to a JSON-File,in order to be able to process it better in the frontend
+# Transform a Pandas DataFrame to a JSON-File,in order to be able to process it better in the frontend
 def to_JSON(df):
+    # remove braces and apostrophe in genres
+    df[movie_header[2]] = df[movie_header[2]].apply(lambda x: hp.toPlainString(x))
+    print(df[['title', "genres"]].head(5))
     json_movies = df.reset_index().to_json(orient='records')
     data = json.loads(json_movies)
     movies_context = {'d': data}
@@ -119,6 +117,7 @@ def find_movie_by_id(id):
     id = int(id)
     movie = movies_metaDataDf[movies_metaDataDf['MovieId'] == id]
     return movie
+
 
 def genrePopularity_recommender(id, amount=20):
     tmp_movies = movies_metaDataDf
@@ -154,8 +153,10 @@ def allAlgorithmsWithOptionalFactors_recommender(id, amount=20, genre_factor=1, 
                                                  rating_factor=1, summary_factor=1):
     id = int(id)
     tmp_movies = movies_metaDataDf
-    tmp_movies['similarity'] = genre_factor * getGenreOverlap(id) + actors_factor * similiarMovieActorsOrDirectors(id) + directors_factor * similiarMovieActorsOrDirectors(id, 'directors') + popularity_factor * getPopularity()
-    tmp_movies['similarity'] = tmp_movies['similarity'] + pattern_factor * similarMoviesPattern(id) + keywords_factor * similiarMovieKeywords(
+    tmp_movies['similarity'] = genre_factor * getGenreOverlap(id) + actors_factor * similiarMovieActorsOrDirectors(
+        id) + directors_factor * similiarMovieActorsOrDirectors(id, 'directors') + popularity_factor * getPopularity()
+    tmp_movies['similarity'] = tmp_movies['similarity'] + pattern_factor * similarMoviesPattern(
+        id) + keywords_factor * similiarMovieKeywords(
         id) + rating_factor * similarMovieRatings(id) + summary_factor * similarMovieSummary(id)
     tmp_movies = tmp_movies.sort_values(by="similarity", ascending=False)
     tmp_movies = tmp_movies.drop(tmp_movies[tmp_movies['MovieId'] == int(id)].index)

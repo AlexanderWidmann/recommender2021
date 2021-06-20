@@ -1,5 +1,6 @@
 import pandas as pd
 import re
+
 path = "../recommendation/ml-25m/"
 
 
@@ -10,11 +11,11 @@ def readFiles(factor):
     ratings = pd.read_csv(path + "ratings.csv", engine="python")
     tags = pd.read_csv(path + "tags.csv", engine="python")
     print("READ IN FILE")
-    moviesDf = pd.DataFrame(movies).sample(int(movies.size/factor))
-    genome_scoresDf = pd.DataFrame(genome_scores).sample(int(genome_scores.size/factor))
-    genome_tags = pd.DataFrame(genome_tags).sample(int(genome_tags.size/factor))
-    ratings = pd.DataFrame(ratings).sample(int(ratings.size/factor))
-    tagsDf = pd.DataFrame(tags).sample(int(tags.size/factor))
+    moviesDf = pd.DataFrame(movies).sample(int(movies.size / factor))
+    genome_scoresDf = pd.DataFrame(genome_scores).sample(int(genome_scores.size / factor))
+    genome_tags = pd.DataFrame(genome_tags).sample(int(genome_tags.size / factor))
+    ratings = pd.DataFrame(ratings).sample(int(ratings.size / factor))
+    tagsDf = pd.DataFrame(tags).sample(int(tags.size / factor))
     return moviesDf, genome_scoresDf, genome_tags, ratings, tagsDf
 
 
@@ -28,11 +29,19 @@ def exportCSV(path, factor):
     dataFrames[4].to_csv(path + "tags-sample.csv")
 
 
+def toPlainString(s):
+    x = re.sub(pattern=r"[['[]", string=s, repl="")
+    x = re.sub(pattern=r"[]]", string=x, repl="")
+    x = re.sub(pattern=r"\d", string=x, repl="")
 
-def toString(s):
-
-    x = re.sub(pattern="\W",string= s, repl=" ")
     return x
 
+
+def convertToYoutubeId(s):
+    x = re.sub(pattern="\W", string=s, repl=" ")
+    x = re.sub(pattern="\s", string=x, repl="")
+    return x
+
+
 if __name__ == '__main__':
-    toString("['Adventure', 'Fantasy', 'Family']")
+    print(toPlainString("0 0 ['Adventure', 'Fantasy', 'Family']"))

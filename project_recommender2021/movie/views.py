@@ -1,11 +1,13 @@
-from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.shortcuts import render
 import movie.forms as forms
 import recommendation as rec
 import helper as hp
-
+from django.urls import reverse
+from index.forms import MoviesForm
 
 # Create your views here.
 def showMovie(request):
@@ -17,8 +19,10 @@ def showMovie(request):
     form.title = df['title'].iloc[0]
     form.plotSummary = df['plotSummary'].iloc[0]
     form.releaseYear = df['releaseDate']
-    form.directors = hp.toString(df['directors'].iloc[0])
-    form.actors = hp.toString(df['actors'].iloc[0])
+    form.directors = hp.toPlainString(df['directors'].iloc[0])
+    form.actors = hp.toPlainString(df['actors'].iloc[0])
+    print(hp.toPlainString(df["youtubeTrailerIds"].iloc[0]))
+    form.youtubeTrailerIds = hp.convertToYoutubeId(df["youtubeTrailerIds"].iloc[0])
     form.movieId = id
 
     return render(request, "movie.html", {"form": form})
@@ -103,3 +107,4 @@ def showComboRecommendationAllCustom(reqeuest):
     movies = rec.allAlgorithmsWithOptionalFactors_recommender(id, genre_factor=3, popularity_factor=2, actors_factor=1, directors_factor=1,
                                                               pattern_factor=0.5, keywords_factor=1.5, rating_factor=1, summary_factor=2)
     return render(reqeuest, "recommandation.html", movies)
+

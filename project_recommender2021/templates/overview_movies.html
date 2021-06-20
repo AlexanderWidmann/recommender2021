@@ -24,6 +24,12 @@
             text-align: center;
             vertical-align: middle;
         }
+          .buttons {
+        display: flex;
+        justify-content: center;
+        margin: 15px;
+        padding: 15px;
+    }
     </style>
 </head>
 
@@ -38,6 +44,11 @@
 
 
 <h1 class="mt-2">Overview Searched Movie </h1>
+
+<div class="buttons">
+    <button class="btn btn-light" onClick="javascript:history.go(-1);">Go Back</button>
+    <button class="btn btn-light" onclick="location.href = '/'">Search for a new Movie</button>
+</div>
 
 
 <div class="justify-content-center">
@@ -66,7 +77,7 @@
                     <td>{{ i.runtime }}</td>
                     <!-- Shows more detail and the recommendation -->
                     <td><form method="post" action="showMovie">
-                        <button value="{{ i.MovieId }}", name="id">Show all details</button>
+                        <button value="{{ i.MovieId }}", name="id" class="btn btn-info">Show all details</button>
                         {% csrf_token %}
                     </form></td>
                 </tr>

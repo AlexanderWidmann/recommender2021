@@ -11,8 +11,8 @@ def index(request):
 
 
 def getMovies(request):
-    if request.method == "POST":
-        movie_name = request.POST['movie_name']
-        movie = rec.movie_json(movie_name)
+
+    movie_name = request.POST['movie_name']
+    movie = rec.movie_json(movie_name)
 
     return render(request, "overview_movies.html", movie)

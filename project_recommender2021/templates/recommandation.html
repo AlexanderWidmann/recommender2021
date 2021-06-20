@@ -64,7 +64,12 @@
                     <td>{{ i.plotSummary }}</td>
                     <td>{{ i.releaseDate }}</td>
                     <td>{{ i.runtime }}</td>
-
+                    <td>
+                        <form method="post" action="showMovie">
+                            <button value="{{ i.MovieId }}" , name="id" class="btn btn-info">Show all details</button>
+                            {% csrf_token %}
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
         {% endif %}

@@ -11,34 +11,139 @@
             margin: auto;
         }
 
+        .center {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 100vh;
+        }
+
+        .moviePics {
+            width: 700px;
+            height: 200px;
+        }
+
+        .flex-container {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            width: 50em;
+            border: 5px solid #000000;
+
+        }
+
+        img {
+
+            height: 300px;
+            width: 202px;
+        }
     </style>
 </head>
 <body>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<h1>Welcome to our page</h1>
+<div class="center">
+    <h1>Welcome to our page</h1>
+    <div>
+        <h5>
+            Search by Movie Name, directors or tags
+        </h5>
+    </div>
 
-<div>
-    <h5>
-        Search by Movie Name, directors or tags
-    </h5>
+    <div class="row justify-content-center">
+        <form class="form-row" action="getMovies" method="post">
+            {% csrf_token %}
+            {{ form.movie_name }}
+            <button type="submit"><i class="fa fa-search"></i></button>
+
+        </form>
+    </div>
+    <br>
+    <p>
+        You can then select a film and use our algorithms to find similar films.
+    </p>
+
+    <p>
+        Our algorithms work in the following way
+    </p>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            Analysis of the keywords and tags
+        </li>
+        <li class="list-group-item">
+            Analysis of the film description
+        </li>
+        <li class="list-group-item">
+            Analysis of similar rating behavior
+        </li>
+        <li class="list-group-item">
+            Combined approaches
+        </li>
+
+    </ul>
+    <br>
+
+    <p><strong>
+        It should be noted that not every movie is in our dataset. Especially newer films are not available.
+    </strong></p>
+     <p><strong>
+        Here is a small overview of the films that can be found in the dataset
+    </strong></p>
+
+    <div class="flex-container">
+        <div class="col-md-4">
+            <img src="https://i.pinimg.com/originals/a1/c5/69/a1c569fdbbdd079705f279e1d731613d.jpg"
+                 alt="MoviePic5">
+        </div>
+            <div class="col-md-4">
+            <img src="https://images-na.ssl-images-amazon.com/images/I/81mgxYNdvuL._AC_SL1500_.jpg"
+                 alt="MoviePic6">
+            </div>
+            <div class="col-md-4">
+
+
+                <img src="https://de.web.img2.acsta.net/r_1280_720/pictures/bzp/01/10568.jpg" alt="MoviePic1"
+                >
+
+            </div>
+            <div class="col-md-4">
+
+
+                <img src="https://images-na.ssl-images-amazon.com/images/I/91L2r0IatgL._AC_SL1500_.jpg"
+                     alt="MoviePic2">
+
+            </div>
+            <div class="col-md-4">
+
+
+                <img src="https://i.pinimg.com/originals/2d/7f/89/2d7f89c0132c4ef04afc6c929f94e1cf.jpg"
+                     alt="MoviePic3">
+
+            </div>
+
+            <div class="col-md-4">
+                <img src="https://img.fruugo.com/product/0/08/14290080_max.jpg" alt="MoviePic4">
+            </div>
+
+        </div>
+    </div>
 </div>
-
-<div class="row justify-content-center">
-    <form class="form-row" action="getMovies" method="post">
-        {% csrf_token %}
-        {{ form.movie_name }}
-        <button type="submit"><i class="fa fa-search"></i></button>
-
-    </form>
-</div>
+<br>
 </body>
 </html>
