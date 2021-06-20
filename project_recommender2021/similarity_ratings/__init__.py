@@ -30,5 +30,5 @@ def itemSimilarityRatings(id, data):
     similiar_movies.sort_values(by="correlation", ascending=False, inplace=True)
     # Drop the first Movie (Corr = 1)
     similiar_movies.drop(0, inplace=True)
-    return similiar_movies
+    return similiar_movies.head(15)
 

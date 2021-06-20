@@ -7,7 +7,6 @@ import numpy as np
 import similarity_ratings as sr
 import pandas as pd
 
-
 pd.set_option('display.max_rows', 1000)
 pd.set_option('display.max_columns', 20)
 
@@ -21,7 +20,7 @@ p = Path(__file__).parent
 path = p.joinpath('ml-25m')
 path_sample = p.joinpath('ml-25m-sample')
 
-AmountRows = 10000
+AmountRows = 10000000
 
 
 def get_data(id):
@@ -131,7 +130,7 @@ def similiarMoviesPattern(id):
     tmp_movies.sort_values(by="similarity", inplace=True, ascending=False)
     print(tmp_movies[["title", "similarity", "tmdb-keywords"]].head(15))
 
-    return tmp_movies
+    return tmp_movies.head(15)
 
 
 # finds similar movies based on the amount of overlaping keywords
@@ -145,14 +144,22 @@ def similiarMovieKeywords(id):
     # Remove all braces, commas etc
     pattern = re.compile(r"\W+")
     # get the keywords as string
+    print(movie['tmdb-keywords'].iloc[0])
     keywords = movie['tmdb-keywords'].iloc[0]
+
     keywords = pattern.sub(" ", keywords)
     # create a set of keywords
     set_keywords = set(keywords.split(" "))
 
-    tmp_movies['overlap'] = tmp_movies["tmdb-keywords"].apply(lambda x: calcOverlap(x, set_keywords))
-    tmp_movies.sort_values(by="overlap", ascending=False, inplace=True)
-    return to_JSON(tmp_movies.head(20))
+    keywords_genres = movie["genres"].iloc[0]
+    keywords_genres = pattern.sub(" ", keywords_genres)
+    set_genres = set(keywords_genres.split(" "))
+
+    tmp_movies['overlap_keywords'] = tmp_movies["tmdb-keywords"].apply(lambda x: calcOverlap(x, set_keywords))
+    tmp_movies['overlap_genres'] = tmp_movies["genres"].apply(lambda x: calcOverlap(x, set_genres))
+    tmp_movies.sort_values(by=["overlap_genres", "overlap_keywords"], ascending=False, inplace=True)
+
+    return to_JSON(tmp_movies.head(15))
 
 
 # finds similar movies based on the amount of overlaping Actors
@@ -162,14 +169,16 @@ def similiarMovieActors(id):
     tmp_movies['actors'].dropna(inplace=True)
     tmp_movies['actors'].replace(np.NaN, " ", inplace=True)
     pattern = re.compile(r"\W+")
+    print(movie['actors'])
     keywords = movie['actors'].iloc[0]
+
     keywords = pattern.sub(" ", keywords)
     set_keywords = set(keywords.split(" "))
     # len(set(pattern.sub(" ",tmp_movies['tmdb-keywords'].iloc[0]).split(" ")).intersection(set_keywords))
     tmp_movies['overlap'] = tmp_movies["actors"].apply(lambda x: calcOverlap(x, set_keywords))
     tmp_movies.sort_values(by="overlap", ascending=False, inplace=True)
-    tmp_movies.drop(0, inplace=True)
-    return to_JSON(tmp_movies.head(20))
+    recommended_movies = tmp_movies.head(16)
+    return to_JSON(recommended_movies.head(15))
 
 
 def similarMovieRatings(id):
@@ -193,4 +202,4 @@ def getData():
 if __name__ == '__main__':
     # algo1(1)
     # print(similiarMovieKeywords(1))
-    print()
+    print(similiarMovieKeywords(1))
