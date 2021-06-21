@@ -20,13 +20,13 @@ p = Path(__file__).parent
 path = p.joinpath('ml-25m')
 path_sample = p.joinpath('ml-25m-sample')
 
-AmountRows = 100
+AmountRows = 400000
 
 
 def get_data(id):
     # needed to properly import the MovieLens-25M Dataset
     if id == 0:
-        return pd.read_csv(path.joinpath('movies.csv'), engine='python', nrows=AmountRows)
+        return pd.read_csv(path.joinpath('movies.csv'), engine='python')
     elif id == 1:
         return pd.read_csv(path.joinpath('ratings.csv'), engine='python', nrows=AmountRows)
     elif id == 2:
@@ -187,10 +187,16 @@ def similarMoviesPattern(id):
     tmp_movies['tmdb-keywords'] = tmp_movies['tmdb-keywords'].replace(np.NaN, " ")
     # tmp_movies['tmdb-keywords'].replace("\d", np.nan, inplace=True)
     keywords = movie['tmdb-keywords']
+    tmp_movies['similarity'] = tmp_movies['tmdb-keywords'].apply(lambda x: similarPattern(x, keywords))
 
-    tmp_movies['similarity'] = tmp_movies['tmdb-keywords'].apply(lambda x: SequenceMatcher(None, keywords, x).ratio())
     tmp_movies['similarity'] = tmp_movies['similarity'].divide(max(tmp_movies['similarity']))
     return tmp_movies['similarity'].fillna(0)
+
+
+def similarPattern(x, keywords):
+    x = hp.toPlainString(x)
+    keywords = hp.toPlainString(keywords.to_string())
+    return SequenceMatcher(None, keywords, x).ratio()
 
 
 def similarMovieKeywords_recommender(id, amount=20):
@@ -365,4 +371,4 @@ if __name__ == '__main__':
     # print(similiarMoviesPattern_recommender(1))
     # similarMovieRatings_recommender(1)
     # similarMovieRatings_recommender(1)
-    print(allAlgorithmsWithOptionalFactors_recommender(1))
+    print()

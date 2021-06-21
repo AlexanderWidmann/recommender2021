@@ -24,12 +24,13 @@
             text-align: center;
             vertical-align: middle;
         }
-          .buttons {
-        display: flex;
-        justify-content: center;
-        margin: 15px;
-        padding: 15px;
-    }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            margin: 15px;
+            padding: 15px;
+        }
     </style>
 </head>
 
@@ -76,10 +77,12 @@
                     <td>{{ i.releaseDate }}</td>
                     <td>{{ i.runtime }}</td>
                     <!-- Shows more detail and the recommendation -->
-                    <td><form method="post" action="showMovie">
-                        <button value="{{ i.MovieId }}", name="id" class="btn btn-info">Show all details</button>
-                        {% csrf_token %}
-                    </form></td>
+                    <td>
+                        <form method="post" action="showMovie">
+                            <button value="{{ i.MovieId }}" , name="id" class="btn btn-info">Show all details</button>
+                            {% csrf_token %}
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
         {% endif %}
