@@ -6,3 +6,5 @@ How to run the project:
 5) Copy and paste the custom_metadata.csv file generated in step 3 into the 'ml-25m' folder.
 6) run the 'summary_similarity_preprocessing' file (this creates the TFIDF cosine similarity matrix to use for the summary similarity)
 7) Run the django project
+
+WARNING: Step 2 and 6 may take some time to finish!
