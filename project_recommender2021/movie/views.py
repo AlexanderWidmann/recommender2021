@@ -99,21 +99,21 @@ def showComboRecommendationWeighted(request):
     return render(request, "recommandation.html", movies)
 
 
-def showComboRecommendationCustom(reqeuest):
-    id = int(reqeuest.POST.get("id"))
+def showComboRecommendationCustom(request):
+    id = int(request.POST.get("id"))
     movies = rec.allAlgorithmsWithOptionalFactors_recommender(int(id), genre_factor=3, popularity_factor=2,
                                                               actors_factor=1,
                                                               directors_factor=1,
                                                               pattern_factor=0.2, keywords_factor=2, rating_factor=2,
                                                               summary_factor=2)
-    return render(reqeuest, "recommandation.html", movies)
+    return render(request, "recommandation.html", movies)
 
 
-def showComboRecommendationAllCustom(reqeuest):
-    id = int(reqeuest.POST.get("id"))
+def showComboRecommendationAllCustom(request):
+    id = int(request.POST.get("id"))
     movies = rec.allAlgorithmsWithOptionalFactors_recommender(int(id), genre_factor=3, popularity_factor=2,
                                                               actors_factor=1,
                                                               directors_factor=1,
                                                               pattern_factor=0.5, keywords_factor=1.5, rating_factor=1,
                                                               summary_factor=2)
-    return render(reqeuest, "recommandation.html", movies)
+    return render(request, "recommandation.html", movies)

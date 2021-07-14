@@ -20,7 +20,7 @@ p = Path(__file__).parent
 path = p.joinpath('ml-25m')
 path_sample = p.joinpath('ml-25m-sample')
 
-AmountRows = 400000
+AmountRows = 1000000
 
 
 def get_data(id):
@@ -36,7 +36,7 @@ def get_data(id):
     elif id == 4:
         return pd.read_csv(path.joinpath('tags.csv'), engine='python', nrows=AmountRows)
     elif id == 5:
-        return pd.read_csv(path.joinpath('custom_metadata.csv'), engine="python", nrows=AmountRows)
+        return pd.read_csv(path.joinpath('custom_metadata.csv'), engine="python")
     else:
         return
 
@@ -67,9 +67,9 @@ def load_similarity():
 
 moviesDf = pd.DataFrame(get_data(0))
 ratingsDf = pd.DataFrame(get_data(1))
-genome_scoresDf = pd.DataFrame(get_data(2))
-genome_tagsDf = pd.DataFrame(get_data(3))
-tags_Df = pd.DataFrame(get_data(4))
+#genome_scoresDf = pd.DataFrame(get_data(2))
+#genome_tagsDf = pd.DataFrame(get_data(3))
+#tags_Df = pd.DataFrame(get_data(4))
 movies_metaDataDf = pd.DataFrame(get_data(5))
 
 similarity = load_similarity()
@@ -84,16 +84,7 @@ def find_movies(movie_name):
     return searched_movies
 
 
-def merge_tags():
-    # merge with genome tags and score
-    movies_scoresDf = pd.merge(moviesDf, genome_scoresDf, on=movie_header[0], how="inner")
-    movies_tagsDf = pd.merge(movies_scoresDf, genome_tagsDf, on=genome_tags_header[0])
 
-    movies_tagsDf = movies_tagsDf.sort_values(by='relevance', ascending=False)
-
-    grouped_movies = movies_tagsDf.groupby(movie_header[0]).head(20)
-
-    return grouped_movies
 
 
 def movie_json(movie_name):
@@ -287,7 +278,8 @@ def similarMovieRatings(id):
     movies_ratings_pivot = ratingsDf.pivot_table(index="movieId", columns="userId", values="rating", fill_value=0)
 
     # Get the Ratings from the selected Movie
-    ratings_movie = movies_ratings_pivot[id]
+    ratings_movie = movies_ratings_pivot[int(id)]
+    print(ratings_movie)
 
     # Calculate the Similiarty between the Ratings-subsets
     similiar_movies = movies_ratings_pivot.corrwith(ratings_movie)
@@ -315,11 +307,11 @@ def similarMovieUserRatings_recommender(id, amount=20):
 def similarMovieUserRatings(id):
     tmp_movies = movies_metaDataDf
     min_rating = 3
-    relevant_users = ratingsDf[ratingsDf['movieId'] == id]
+    relevant_users = ratingsDf[ratingsDf['movieId'] == int(id)]
     relevant_users = relevant_users[relevant_users['rating'] > min_rating]
 
     # filter the rest of the ratings to only the userIds that are chosen as relevant are present
-    movies = ratingsDf[ratingsDf['movieId'] != id]
+    movies = ratingsDf[ratingsDf['movieId'] != int(id)]
     movies = movies[movies['userId'].isin(relevant_users['userId'])]
     movies = movies[['movieId', 'rating']]
     movies = movies[movies['rating'] > min_rating]
@@ -360,7 +352,7 @@ def calcOverlap(x, set_keywords):
 
 def getData():
     # returns all the data, which is necessary for other files
-    return moviesDf, ratingsDf, genome_scoresDf, genome_tagsDf, tags_Df, movies_metaDataDf
+    return moviesDf, ratingsDf, movies_metaDataDf
 
 
 if __name__ == '__main__':
@@ -371,4 +363,4 @@ if __name__ == '__main__':
     # print(similiarMoviesPattern_recommender(1))
     # similarMovieRatings_recommender(1)
     # similarMovieRatings_recommender(1)
-    print()
+    print(similarMovieRatings(3))

@@ -1,6 +1,7 @@
 import pandas as pd
 import re
 
+
 path = "../recommendation/ml-25m/"
 
 
@@ -29,6 +30,9 @@ def exportCSV(path, factor):
     dataFrames[4].to_csv(path + "tags-sample.csv")
 
 
+
+
+
 def toPlainString(s):
     x = re.sub(pattern=r"[['[]", string=s, repl="")
     x = re.sub(pattern=r"[]]", string=x, repl="")
@@ -44,4 +48,4 @@ def convertToYoutubeId(s):
 
 
 if __name__ == '__main__':
-    print(toPlainString("0 0 ['Adventure', 'Fantasy', 'Family']"))
+    print()
