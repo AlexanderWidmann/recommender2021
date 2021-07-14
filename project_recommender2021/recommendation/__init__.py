@@ -22,7 +22,7 @@ path_sample = p.joinpath('ml-25m-sample')
 
 AmountRows = 1000000
 
-
+#read in datasets
 def get_data(id):
     # needed to properly import the MovieLens-25M Dataset
     if id == 0:
@@ -40,7 +40,7 @@ def get_data(id):
     else:
         return
 
-
+#read in smaller datasets
 def get_sample_data(id):
     if id == 0:
         return pd.read_csv(path_sample.joinpath('movies-sample.csv'), engine='python')
@@ -74,7 +74,7 @@ movies_metaDataDf = pd.DataFrame(get_data(5))
 
 similarity = load_similarity()
 
-
+#Finds movie by keywords, name or directors
 def find_movies(movie_name):
     searched_movies = movies_metaDataDf[(
             movies_metaDataDf[movie_header[1]].str.contains(movie_name, regex=True, flags=re.IGNORECASE) |
@@ -86,7 +86,7 @@ def find_movies(movie_name):
 
 
 
-
+#converts the found movies to json
 def movie_json(movie_name):
     # find the movies based on movie_name
     searched_movies = find_movies(movie_name=movie_name)
@@ -103,13 +103,13 @@ def to_JSON(df):
     movies_context = {'d': data}
     return movies_context
 
-
+#finds a movie by id
 def find_movie_by_id(id):
     id = int(id)
     movie = movies_metaDataDf[movies_metaDataDf['MovieId'] == id]
     return movie
 
-
+#finds similar movies based on the genres and popularity
 def genrePopularity_recommender(id, amount=20):
     tmp_movies = movies_metaDataDf
     tmp_movies['similarity'] = getGenreOverlap(id) * getPopularity()
@@ -153,7 +153,7 @@ def allAlgorithmsWithOptionalFactors_recommender(id, amount=20, genre_factor=1, 
     tmp_movies = tmp_movies.drop(tmp_movies[tmp_movies['MovieId'] == int(id)].index)
     return to_JSON(tmp_movies.head(amount))
 
-
+#calculates the popularity based on ratings
 def getPopularity():
     tmp_movies = movies_metaDataDf
     tmp_movies['similarity'] = tmp_movies['avgRating'] * tmp_movies['numRatings']
@@ -183,13 +183,13 @@ def similarMoviesPattern(id):
     tmp_movies['similarity'] = tmp_movies['similarity'].divide(max(tmp_movies['similarity']))
     return tmp_movies['similarity'].fillna(0)
 
-
+#finds pattern in a given string
 def similarPattern(x, keywords):
     x = hp.toPlainString(x)
     keywords = hp.toPlainString(keywords.to_string())
     return SequenceMatcher(None, keywords, x).ratio()
 
-
+#finds similar movies based on the amount of matched keywords
 def similarMovieKeywords_recommender(id, amount=20):
     tmp_movies = movies_metaDataDf
     tmp_movies['similarity'] = similiarMovieKeywords(int(id))
@@ -218,7 +218,7 @@ def similiarMovieKeywords(id):
     tmp_movies['similarity'] = tmp_movies['similarity'].divide(max(tmp_movies['similarity']))
     return tmp_movies['similarity'].fillna(0)
 
-
+# finds similar movies based on the amount of overlaping Actors
 def similarMovieActors_recommender(id, amount=20):
     tmp_movies = movies_metaDataDf
     tmp_movies['similarity'] = similiarMovieActorsOrDirectors(id)
@@ -242,7 +242,7 @@ def similiarMovieActorsOrDirectors(id, col_name='actors'):
     tmp_movies['similarity'] = tmp_movies['similarity'].divide(max(tmp_movies['similarity']))
     return tmp_movies['similarity'].fillna(0)
 
-
+# finds similar movies based on the summary
 def similarMovieSummary_recommender(id, amount=20):
     tmp_movies = movies_metaDataDf
     tmp_movies['similarity'] = similarMovieSummary(id)
@@ -262,7 +262,7 @@ def similarMovieSummary(id):
     tmp_movies['similarity'] = similarities[:AmountRows]
     return tmp_movies['similarity'].fillna(0)
 
-
+# find similar movies based on the ratings
 def similarMovieRatings_recommender(id, amount=20):
     tmp_movies = movies_metaDataDf
     tmp_movies['similarity'] = similarMovieRatings(int(id))
@@ -328,7 +328,7 @@ def similarMovieUserRatings(id):
     merged_movies['similarity'] = merged_movies['similarity'].divide(max(merged_movies['similarity']))
     return merged_movies['similarity'].fillna(0)
 
-
+# calculates the genre overlap for the movies
 def getGenreOverlap(id):
     tmp_movies = movies_metaDataDf[['MovieId', 'genres']].copy()
     movie_genres = eval(find_movie_by_id(id)['genres'].iloc[0])
@@ -336,11 +336,11 @@ def getGenreOverlap(id):
     tmp_movies['similarity'] = tmp_movies['similarity'].divide(max(tmp_movies['similarity']))
     return tmp_movies['similarity'].fillna(0)
 
-
+# helper method for getGenreOverlap
 def calcListOverlap(listA, listB):
     return len(list(set(listA).intersection(set(listB))))
 
-
+# helper method for similiarMovieActorsOrDirectors
 def calcOverlap(x, set_keywords):
     # Remove braces, commas etc.
     pattern = re.compile(r"\W+")

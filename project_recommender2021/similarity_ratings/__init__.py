@@ -1,7 +1,7 @@
 
 import pandas as pd
 
-
+#calculates similiarity based on ratings
 def itemSimilarityRatings(id, data):
 
     moviesDf = data[0]

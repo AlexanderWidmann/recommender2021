@@ -4,7 +4,7 @@ import re
 
 path = "../recommendation/ml-25m/"
 
-
+#read in the file to generate smaller subsets
 def readFiles(factor):
     movies = pd.read_csv(path + ("movies.csv"), engine="python")
     genome_scores = pd.read_csv(path + "genome-scores.csv", engine="python")
@@ -19,7 +19,7 @@ def readFiles(factor):
     tagsDf = pd.DataFrame(tags).sample(int(tags.size / factor))
     return moviesDf, genome_scoresDf, genome_tags, ratings, tagsDf
 
-
+#create smaller subsets from the datasets
 def exportCSV(path, factor):
     dataFrames = readFiles(factor)
 
@@ -32,7 +32,7 @@ def exportCSV(path, factor):
 
 
 
-
+#removes braces, numbers, etc
 def toPlainString(s):
     x = re.sub(pattern=r"[['[]", string=s, repl="")
     x = re.sub(pattern=r"[]]", string=x, repl="")
@@ -40,7 +40,7 @@ def toPlainString(s):
 
     return x
 
-
+#remove braces etc. for youtube ids
 def convertToYoutubeId(s):
     x = re.sub(pattern="\W", string=s, repl=" ")
     x = re.sub(pattern="\s", string=x, repl="")
